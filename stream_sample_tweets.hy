@@ -1,7 +1,7 @@
-(import [tweepy.streaming [StreamListener]])
-(import [tweepy [OAuthHandler Stream]])
-
-(import config)
+(import [tweepy.streaming [StreamListener]]
+        [tweepy [OAuthHandler Stream]]
+        [goless [go chan]]
+        [config])
 
 
 (defclass StdOutListener [StreamListener]
