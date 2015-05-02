@@ -13,8 +13,9 @@
 
 
 (defn make_stream [auth]
-  (t_stream.TwitterStream
-   "stream.twitter.com" True auth))
+  (apply t_stream.TwitterStream
+         []
+         {"auth" auth}))
 
 
 (defn start_stream []
