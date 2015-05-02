@@ -1,24 +1,37 @@
-(import [tweepy.streaming [StreamListener]]
-        [tweepy [OAuthHandler Stream]]
-        [goless [go chan]]
+(import [twitter.stream :as t_stream]
+        [twitter.oauth :as t_oauth]
+        [twitter.util :as t_util]
         [config])
 
 
-(defclass StdOutListener [StreamListener]
-  [[on_data (fn [self data]
-              (print data)
-              True)]
-   [on_error (fn [self data]
-              (print data))]])
+(defn make_auth []
+  (let [[ck (. config consumer_key)]
+        [cs (. config consumer_secret)]
+        [at (. config access_token)]
+        [ats (. config access_token_secret)]]
+    (t_oauth.OAuth at ats ck cs)))
 
-(def auth
-  (let [[ck config.consumer_key]
-        [cs config.consumer_secret]
-        [at config.access_token]
-        [ats config.access_token_secret]]
-    (doto (OAuthHandler ck cs)
-          (.set_access_token at ats))))
 
-(let [[l (StdOutListener)]
-      [stream (Stream auth l)]]
-  (apply (. stream sample)))
+(defn make_stream [auth]
+  (t_stream.TwitterStream
+   "stream.twitter.com" True auth))
+
+
+(defn start_stream []
+  (let [[auth (make_auth)]
+        [stream (make_stream auth)]
+        [tweet_iter (.sample stream.statuses)]]
+    (for [tweet tweet_iter]
+      (print tweet))
+    0))
+
+
+(defn tweetalyze []
+  (do
+   (print "hy")
+   (start_stream)
+   (print "by")))
+
+
+(defmain [&rest args]
+  (tweetalyze))
