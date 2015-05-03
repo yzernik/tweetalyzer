@@ -18,13 +18,29 @@
          {"auth" auth}))
 
 
+(defn make_sample_tweet_iter [stream]
+  (.sample stream.statuses))
+
+
+(defn make_drunk_response_tweet_iter [stream]
+  (let [[q "drunk"]
+        [kwargs {"track" q}]]
+    (apply (. stream.statuses filter) [] kwargs)))
+
+
 (defn start_stream []
   (let [[auth (make_auth)]
         [stream (make_stream auth)]
-        [tweet_iter (.sample stream.statuses)]]
+        [tweet_iter (make_drunk_response_tweet_iter stream)]]
     (for [tweet tweet_iter]
-      (print tweet))
+      (print (tweet_text tweet)))
     0))
+
+
+(defn tweet_text [tweet]
+  (if (in "text" tweet)
+    (get tweet "text")
+    nil))
 
 
 (defn tweetalyze []
