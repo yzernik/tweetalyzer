@@ -1,4 +1,5 @@
 (import [twitter :as t]
+        [twitter.api :as t_api]
         [twitter.stream :as t_stream]
         [twitter.oauth :as t_oauth]
         [twitter.util :as t_util]
@@ -19,7 +20,9 @@
 
 (defn get_tweet [id]
   "Get a tweet by id"
-  (apply (. rest_client.statuses show) [] {"id" id}))
+  (try
+   (apply (. rest_client.statuses show) [] {"id" id})
+   (catch [e t_api.TwitterHTTPError] nil)))
 
 (defn sample_stream []
   "Make an iterator of sample tweets"
@@ -39,6 +42,16 @@
   "Get the text attribute of a tweet"
   (tweet_attr tweet "text"))
 
+(defn has_text? [tweet]
+  "Returns True if the tweet has text"
+  (not (nil? (tweet_text tweet))))
+
 (defn tweet_reply_to [tweet]
   "Get the in_reply_to_status_id_str attribute of a tweet"
   (tweet_attr tweet "in_reply_to_status_id_str"))
+
+(defn print_tweet [tweet]
+  "Print the text of a tweet in a single line"
+  (let [[id (tweet_attr tweet "id")]
+        [txt (tweet_text tweet)]]
+    (print id (.replace txt "\n" ""))))
