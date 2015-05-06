@@ -35,7 +35,7 @@
 (defn has-valid-flag? [tweet]
   "Return True if the txt contains a valid drunk tweet response"
   (let [[txt (t.tweet-text tweet)]
-        [pred (fn [resp] (in txt resp))]]
+        [pred (fn [resp] (in resp txt))]]
     (some pred flags)))
 
 (defn get-drunk-tweet [response]
