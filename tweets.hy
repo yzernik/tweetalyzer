@@ -1,57 +1,57 @@
 (import [twitter :as t]
-        [twitter.api :as t_api]
-        [twitter.stream :as t_stream]
-        [twitter.oauth :as t_oauth]
-        [twitter.util :as t_util]
+        [twitter.api :as t-api]
+        [twitter.stream :as t-stream]
+        [twitter.oauth :as t-oauth]
+        [twitter.util :as t-util]
         [config :as conf])
 
 (def auth
-  (let [[ck conf.consumer_key]
-        [cs conf.consumer_secret]
-        [at conf.access_token]
-        [ats conf.access_token_secret]]
-    (t_oauth.OAuth at ats ck cs)))
+  (let [[ck conf.consumer-key]
+        [cs conf.consumer-secret]
+        [at conf.access-token]
+        [ats conf.access-token-secret]]
+    (t-oauth.OAuth at ats ck cs)))
 
-(def rest_client
+(def rest-client
   (apply t.Twitter [] {"auth" auth}))
 
-(def stream_client
-  (apply t_stream.TwitterStream [] {"auth" auth}))
+(def stream-client
+  (apply t-stream.TwitterStream [] {"auth" auth}))
 
-(defn get_tweet [id]
+(defn get-tweet [id]
   "Get a tweet by id"
   (try
-   (apply (. rest_client.statuses show) [] {"id" id})
-   (catch [e t_api.TwitterHTTPError] nil)))
+   (apply (. rest-client.statuses show) [] {"id" id})
+   (catch [e t-api.TwitterHTTPError] nil)))
 
-(defn sample_stream []
+(defn sample-stream []
   "Make an iterator of sample tweets"
-  (.sample stream_client.statuses))
+  (.sample stream-client.statuses))
 
-(defn text_filtered_stream [q]
+(defn text-filtered-stream [q]
   "Make an iterator of text filtered tweets"
-  (apply (. stream_client.statuses filter) [] {"track" q}))
+  (apply (. stream-client.statuses filter) [] {"track" q}))
 
-(defn tweet_attr [tweet attr]
+(defn tweet-attr [tweet attr]
   "Get an attribute of a tweet if it exists, else nil"
   (if (in attr tweet)
     (get tweet attr)
     nil))
 
-(defn tweet_text [tweet]
+(defn tweet-text [tweet]
   "Get the text attribute of a tweet"
-  (tweet_attr tweet "text"))
+  (tweet-attr tweet "text"))
 
-(defn has_text? [tweet]
+(defn has-text? [tweet]
   "Returns True if the tweet has text"
-  (not (nil? (tweet_text tweet))))
+  (not (nil? (tweet-text tweet))))
 
-(defn tweet_reply_to [tweet]
-  "Get the in_reply_to_status_id_str attribute of a tweet"
-  (tweet_attr tweet "in_reply_to_status_id_str"))
+(defn tweet-reply-to [tweet]
+  "Get the in-reply-to-status-id-str attribute of a tweet"
+  (tweet-attr tweet "in-reply-to-status-id-str"))
 
-(defn print_tweet [tweet]
+(defn print-tweet [tweet]
   "Print the text of a tweet in a single line"
-  (let [[id (tweet_attr tweet "id")]
-        [txt (tweet_text tweet)]]
+  (let [[id (tweet-attr tweet "id")]
+        [txt (tweet-text tweet)]]
     (print id (.replace txt "\n" ""))))

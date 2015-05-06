@@ -17,30 +17,32 @@
       (for [phr phrases]
         (yield (+ phr " " adj))))))))
 
-(defn print_drunk_stream []
+(defn print-drunk-stream []
   "Print the stream of human-labeled drunk tweets"
-  (let [[it (drunk_tweets)]]
+  (let [[it (drunk-tweets)]]
     (for [tweet it]
-      (t.print_tweet tweet))))
+      (t.print-tweet tweet))))
 
-(defn drunk_tweets []
+(defn drunk-tweets []
   "Get an iterator of human-labeled drunk tweets"
   (let [[q (.join "," flags)]
-        [fs (t.text_filtered_stream q)]
-        [dts (map get_drunk_tweet fs)]]
-    (ap-filter (not (nil? it)) dts)))
+        [fs (t.text-filtered-stream q)]]
+    (->> fs
+         (filter has-valid-flag?)
+         (map get-drunk-tweet)
+         (ap-filter (not (nil? it))))))
 
-(defn has_valid_flag? [tweet]
+(defn has-valid-flag? [tweet]
   "Return True if the txt contains a valid drunk tweet response"
-  (let [[txt (t.tweet_text tweet)]
+  (let [[txt (t.tweet-text tweet)]
         [pred (fn [resp] (in txt resp))]]
     (some pred flags)))
 
-(defn get_drunk_tweet [response]
+(defn get-drunk-tweet [response]
   "Get the original tweet that prompted the drunk response tweet"
-  (let [[id (t.tweet_reply_to response)]]
+  (let [[id (t.tweet-reply-to response)]]
     (if id
-      (t.get_tweet id))))
+      (t.get-tweet id))))
 
 (defmain [&rest args]
-  (print_drunk_stream))
+  (print-drunk-stream))
