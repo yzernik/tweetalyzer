@@ -47,8 +47,8 @@
   (not (nil? (tweet-text tweet))))
 
 (defn tweet-reply-to [tweet]
-  "Get the in-reply-to-status-id-str attribute of a tweet"
-  (tweet-attr tweet "in-reply-to-status-id-str"))
+  "Get the in_reply_to_status_id_str attribute of a tweet"
+  (tweet-attr tweet "in_reply_to_status_id_str"))
 
 (defn print-tweet [tweet]
   "Print the text of a tweet in a single line"

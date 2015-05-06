@@ -34,15 +34,14 @@
 
 (defn has-valid-flag? [tweet]
   "Return True if the txt contains a valid drunk tweet response"
-  (let [[txt (t.tweet-text tweet)]
-        [pred (fn [resp] (in resp txt))]]
-    (some pred flags)))
+  (let [[txt (t.tweet-text tweet)]]
+    (if txt
+      (some (fn [flag] (in (.lower flag) (.lower txt))) flags))))
 
 (defn get-drunk-tweet [response]
   "Get the original tweet that prompted the drunk response tweet"
-  (let [[id (t.tweet-reply-to response)]]
-    (if id
-      (t.get-tweet id))))
+  (ap-if (t.tweet-reply-to response)
+         (t.get-tweet it)))
 
 (defmain [&rest args]
   (print-drunk-stream))
