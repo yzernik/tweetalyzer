@@ -34,9 +34,7 @@
 
 (defn tweet-attr [tweet attr]
   "Get an attribute of a tweet if it exists, else nil"
-  (if (in attr tweet)
-    (get tweet attr)
-    nil))
+  (if (in attr tweet) (get tweet attr) nil))
 
 (defn tweet-text [tweet]
   "Get the text attribute of a tweet"
@@ -44,14 +42,8 @@
 
 (defn has-text? [tweet]
   "Returns True if the tweet has text"
-  (not (nil? (tweet-text tweet))))
+  (if (tweet-text tweet) True))
 
 (defn tweet-reply-to [tweet]
   "Get the in_reply_to_status_id_str attribute of a tweet"
   (tweet-attr tweet "in_reply_to_status_id_str"))
-
-(defn print-tweet [tweet]
-  "Print the text of a tweet in a single line"
-  (let [[id (tweet-attr tweet "id")]
-        [txt (tweet-text tweet)]]
-    (print id (.replace txt "\n" ""))))

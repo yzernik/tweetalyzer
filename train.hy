@@ -8,35 +8,47 @@
            "flushed" "high" "inebriated" "laced" "plastered"
            "wasted" "intoxicated"])
 
-(def phrases
+(def prefixes
   ["you're" "you are" "you"])
 
-(def flags
+(def phrases
   (list (apply (fn []
     (for [adj adjectives]
-      (for [phr phrases]
-        (yield (+ phr " " adj))))))))
+      (for [pre prefixes]
+        (yield (+ pre " " adj))))))))
 
-(defn print-drunk-stream []
-  "Print the stream of human-labeled drunk tweets"
-  (let [[it (drunk-tweets)]]
+(defn print-labeled-tweets [label stream n]
+  "Print some number of labeled tweets from a stream"
+  (let [[it (take n (stream))]]
     (for [tweet it]
-      (t.print-tweet tweet))))
+      (print (labeled-row label tweet)))))
+
+(defn labeled-row [label tweet]
+  "Create a labeled row of TSV data for training"
+  (let [[data (-> tweet
+                  (t.tweet_text)
+                  (.replace "\n" ""))]]
+    (.join "\t" [label data])))
 
 (defn drunk-tweets []
   "Get an iterator of human-labeled drunk tweets"
-  (let [[q (.join "," flags)]
+  (let [[q (.join "," phrases)]
         [fs (t.text-filtered-stream q)]]
     (->> fs
-         (filter has-valid-flag?)
+         (filter has-drunk-response-phrase?)
          (map get-drunk-tweet)
-         (ap-filter (not (nil? it))))))
+         (filter identity))))
 
-(defn has-valid-flag? [tweet]
-  "Return True if the txt contains a valid drunk tweet response"
+(defn normal-tweets []
+  "Get an iterator of normal tweets"
+  (->> (t.sample-stream)
+       (filter t.has-text?)))
+
+(defn has-drunk-response-phrase? [tweet]
+  "Return True if the text contains a valid drunk tweet response"
   (let [[txt (t.tweet-text tweet)]]
     (if txt
-      (some (fn [flag] (in (.lower flag) (.lower txt))) flags))))
+      (some (fn [phrase] (in (.lower phrase) (.lower txt))) phrases))))
 
 (defn get-drunk-tweet [response]
   "Get the original tweet that prompted the drunk response tweet"
@@ -44,4 +56,5 @@
          (t.get-tweet it)))
 
 (defmain [&rest args]
-  (print-drunk-stream))
+  (print-labeled-tweets "sober" normal-tweets 5)
+  (print-labeled-tweets "drunk" drunk-tweets 5))
