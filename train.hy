@@ -36,10 +36,11 @@
         [fs (t.text-filtered-stream q)]]
     (->> fs
          (filter t.has-text?)
-         (filter t.in-english?)
          (filter has-drunk-response-phrase?)
          (map get-drunk-tweet)
-         (filter identity))))
+         (filter identity)
+         (filter t.has-text?)
+         (filter t.in-english?))))
 
 (defn normal-tweets []
   "Get an iterator of normal tweets"
@@ -58,5 +59,4 @@
          (t.get-tweet it)))
 
 (defmain [&rest args]
-  (print-labeled-tweets "sober" normal-tweets 2)
-  (print-labeled-tweets "drunk" drunk-tweets 2))
+  (print-labeled-tweets "drunk" drunk-tweets 100000))
