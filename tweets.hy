@@ -24,6 +24,13 @@
    (apply (. rest-client.statuses show) [] {"id" id})
    (catch [e t-api.TwitterHTTPError] nil)))
 
+(defn send-tweet-reply [tweet msg]
+  "Send a reply to a tweet with a message"
+  (let [[id (tweet-attr "id")]
+        [user (tweet-attr "screen_name")]
+        [txt (+ "@" user " " msg)]]
+    (apply (. rest-client.statuses update) [txt] {"in_reply_to_status_id" id})))
+
 (defn sample-stream []
   "Make an iterator of sample tweets"
   (.sample stream-client.statuses))

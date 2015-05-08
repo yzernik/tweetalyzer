@@ -3,3 +3,4 @@ config.py
 *.pyc
 
 venv/
+data/

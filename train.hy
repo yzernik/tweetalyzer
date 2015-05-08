@@ -35,6 +35,7 @@
   (let [[q (.join "," phrases)]
         [fs (t.text-filtered-stream q)]]
     (->> fs
+         (filter t.has-text?)
          (filter has-drunk-response-phrase?)
          (map get-drunk-tweet)
          (filter identity))))
@@ -47,8 +48,7 @@
 (defn has-drunk-response-phrase? [tweet]
   "Return True if the text contains a valid drunk tweet response"
   (let [[txt (t.tweet-text tweet)]]
-    (if txt
-      (some (fn [phrase] (in (.lower phrase) (.lower txt))) phrases))))
+    (some (fn [phrase] (in (.lower phrase) (.lower txt))) phrases)))
 
 (defn get-drunk-tweet [response]
   "Get the original tweet that prompted the drunk response tweet"
@@ -56,5 +56,5 @@
          (t.get-tweet it)))
 
 (defmain [&rest args]
-  (print-labeled-tweets "sober" normal-tweets 5)
-  (print-labeled-tweets "drunk" drunk-tweets 5))
+  (print-labeled-tweets "sober" normal-tweets 2)
+  (print-labeled-tweets "drunk" drunk-tweets 2))
