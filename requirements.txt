@@ -1,4 +1,7 @@
 astor==0.5
 hy==0.10.1
+MetaMindApi==1.2
+requests==2.7.0
 rply==0.7.3
+simplejson==3.6.5
 twitter==1.17.0
