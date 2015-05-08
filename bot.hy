@@ -9,14 +9,16 @@
 (defn listen []
   "Listen to the tweet stream and check for drunk tweets periodically"
   (let [[last (now)]]
-    (for [tweet (tweets-with-text)]
+    (for [tweet (candidate-tweets)]
       (if (ready-for-request? last (now))
         (do (setv last (now))
             (tweetalyze tweet))))))
 
-(defn tweets-with-text []
-  "Get a sample stream of tweets with text"
-  (filter t.has-text? (t.sample-stream)))
+(defn candidate-tweets []
+  "Get a sample stream of tweets to check"
+  (->> (t.sample-stream)
+       (filter t.has-text?)
+       (filter t.in-english?)))
 
 (defn now []
   "Datetime now"

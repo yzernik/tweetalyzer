@@ -36,6 +36,7 @@
         [fs (t.text-filtered-stream q)]]
     (->> fs
          (filter t.has-text?)
+         (filter t.in-english?)
          (filter has-drunk-response-phrase?)
          (map get-drunk-tweet)
          (filter identity))))
@@ -43,7 +44,8 @@
 (defn normal-tweets []
   "Get an iterator of normal tweets"
   (->> (t.sample-stream)
-       (filter t.has-text?)))
+       (filter t.has-text?)
+       (filter t.in-english?)))
 
 (defn has-drunk-response-phrase? [tweet]
   "Return True if the text contains a valid drunk tweet response"

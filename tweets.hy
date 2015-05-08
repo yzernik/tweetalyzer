@@ -51,6 +51,10 @@
   "Returns True if the tweet has text"
   (if (tweet-text tweet) True))
 
+(defn in-english? [tweet]
+  "Return True if the tweet is in English"
+  (= "en" (tweet-attr tweet "lang")))
+
 (defn tweet-reply-to [tweet]
   "Get the in_reply_to_status_id_str attribute of a tweet"
   (tweet-attr tweet "in_reply_to_status_id_str"))
