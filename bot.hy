@@ -8,10 +8,10 @@
 
 (defn listen []
   "Listen to the tweet stream and check for drunk tweets periodically"
-  (let [[last (now)]]
+  (let [[t (now)]]
     (for [tweet (candidate-tweets)]
-      (if (ready-for-request? last (now))
-        (do (setv last (now))
+      (if (ready-for-request? t (now))
+        (do (setv t (now))
             (tweetalyze tweet))))))
 
 (defn candidate-tweets []
@@ -24,20 +24,18 @@
   "Datetime now"
   (.now dt.datetime))
 
-(defn ready-for-request? [last t]
+(defn ready-for-request? [prev cur]
   "Check if enough time passed (for rate limiting)"
-  (let [[diff (- t last)]]
+  (let [[diff (- cur prev)]]
     (> diff interval)))
 
 (defn tweetalyze [tweet]
   "Predict if a tweet is a tweet is a drunk tweet, and if so, reply."
-  (do (print (t.tweet-text tweet))
-      (if (is-drunk? tweet)
-        (do (print "******* is drunk!")
-            (respond tweet)))))
+  (if (is-drunk? tweet)
+    (respond tweet)))
 
 (defn is-drunk? [tweet]
-  "Return true if the tweet is classified as drunk"
+  "Return True if the tweet is classified as drunk"
   (let [[txt (t.tweet_text tweet)]
         [prediction (c.predict txt)]]
     (= "drunk" prediction)))

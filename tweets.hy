@@ -29,7 +29,9 @@
   (let [[id (tweet-attr "id")]
         [user (tweet-attr "screen_name")]
         [txt (+ "@" user " " msg)]]
-    (apply (. rest-client.statuses update) [txt] {"in_reply_to_status_id" id})))
+    (try
+     (apply (. rest-client.statuses update) [txt] {"in_reply_to_status_id" id})
+     (catch [e t-api.TwitterHTTPError] nil))))
 
 (defn sample-stream []
   "Make an iterator of sample tweets"
@@ -45,7 +47,9 @@
 
 (defn tweet-text [tweet]
   "Get the text attribute of a tweet"
-  (tweet-attr tweet "text"))
+  (let [[raw-txt (tweet-attr tweet "text")]]
+    (if raw-txt
+      (.replace raw-txt "\n" ""))))
 
 (defn has-text? [tweet]
   "Returns True if the tweet has text"

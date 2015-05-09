@@ -25,9 +25,7 @@
 
 (defn labeled-row [label tweet]
   "Create a labeled row of TSV data for training"
-  (let [[data (-> tweet
-                  (t.tweet_text)
-                  (.replace "\n" ""))]]
+  (let [[data (t.tweet_text tweet)]]
     (.join "\t" [label data])))
 
 (defn drunk-tweets []
