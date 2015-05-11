@@ -1,4 +1,4 @@
-(import [tweets :as t])
+(import [tweetalyzer.tweets :as t])
 
 (require hy.contrib.anaphoric)
 
@@ -57,4 +57,5 @@
          (t.get-tweet it)))
 
 (defmain [&rest args]
-  (print-labeled-tweets "drunk" drunk-tweets 100000))
+  (print-labeled-tweets "drunk" drunk-tweets 10)
+  (print-labeled-tweets "sober" normal-tweets 100))

@@ -1,5 +1,5 @@
 (import [metamind.api :as mm]
-        [config :as conf])
+        [tweetalyzer.config :as conf])
 
 
 (mm.set_api_key conf.metamind_api_key)

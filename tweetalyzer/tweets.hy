@@ -3,7 +3,7 @@
         [twitter.stream :as t-stream]
         [twitter.oauth :as t-oauth]
         [twitter.util :as t-util]
-        [config :as conf])
+        [tweetalyzer.config :as conf])
 
 (def auth
   (let [[ck conf.consumer-key]

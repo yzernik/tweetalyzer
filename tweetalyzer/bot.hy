@@ -1,6 +1,6 @@
 (import [datetime :as dt]
-        [classify :as c]
-        [tweets :as t])
+        [tweetalyzer.classify :as c]
+        [tweetalyzer.tweets :as t])
 
 (def interval
   (let [[numdays (/ 1 1000)]]
