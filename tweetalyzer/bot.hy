@@ -32,7 +32,8 @@
 (defn tweetalyze [tweet]
   "Predict if a tweet is a tweet is a drunk tweet, and if so, reply."
   (if (is-drunk? tweet)
-    (respond tweet)))
+    (do (print "Found drunk tweet: "tweet)
+        (respond tweet))))
 
 (defn is-drunk? [tweet]
   "Return True if the tweet is classified as drunk"
