@@ -1,6 +1,5 @@
-config.py
-
 *.pyc
-
 venv/
+.env
+
 data/
