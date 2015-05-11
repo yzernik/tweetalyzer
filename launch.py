@@ -2,5 +2,5 @@ import hy
 import tweetalyzer.bot
 
 
-print("")
+print("Starting bot...")
 tweetalyzer.bot.listen()
