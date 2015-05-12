@@ -43,7 +43,7 @@
 
 (defn respond [tweet]
   "Respond to a drunken tweet"
-  (do (.warn log "Responding to drunk tweet.")
+  (do (print "Responding to drunk tweet.")
       (t.send-tweet-reply tweet "You appear to be drunk")))
 
 (defn start []
