@@ -31,8 +31,8 @@
 
 (defn tweetalyze [tweet]
   "Predict if a tweet is a tweet is a drunk tweet, and if so, reply."
-  (if (is-drunk? tweet)
-    (do (print "Found drunk tweet: "tweet)
+  (do (print "Checking tweet: " (t.tweet-attr tweet "id"))
+      (if (is-drunk? tweet)
         (respond tweet))))
 
 (defn is-drunk? [tweet]
@@ -43,7 +43,8 @@
 
 (defn respond [tweet]
   "Respond to a drunken tweet"
-  (t.send-tweet-reply tweet "You appear to be drunk"))
+  (do (.warn log "Responding to drunk tweet.")
+      (t.send-tweet-reply tweet "You appear to be drunk")))
 
 (defn start []
   "Start the bot"

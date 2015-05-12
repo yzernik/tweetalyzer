@@ -11,5 +11,5 @@
 (defn predict [txt]
   "Get the prediction label for given text"
   (let [[resp (apply (. model predict) [txt] {"input_type" "text"})]]
-    (print "resp: " resp)
+    (print "Metamind response: " resp)
     (get (first resp) "label")))
