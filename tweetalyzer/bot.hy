@@ -45,5 +45,9 @@
   "Respond to a drunken tweet"
   (t.send-tweet-reply tweet "You appear to be drunk"))
 
+(defn start []
+  "Start the bot"
+  (while True (listen)))
+
 (defmain [&rest args]
-  (listen))
+  (start))

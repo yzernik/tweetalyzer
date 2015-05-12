@@ -26,11 +26,11 @@
 
 (defn send-tweet-reply [tweet msg]
   "Send a reply to a tweet with a message"
-  (let [[id (tweet-attr "id")]
-        [user (tweet-attr "screen_name")]
+  (let [[id (tweet-attr tweet "id")]
+        [user (tweeter-screen-name tweet)]
         [txt (+ "@" user " " msg)]]
     (try
-     (apply (. rest-client.statuses update) [txt] {"in_reply_to_status_id" id})
+     (apply (. rest-client.statuses update) [] {"status" txt "in_reply_to_status_id" id})
      (catch [e t-api.TwitterHTTPError] nil))))
 
 (defn sample-stream []
@@ -58,6 +58,11 @@
 (defn in-english? [tweet]
   "Return True if the tweet is in English"
   (= "en" (tweet-attr tweet "lang")))
+
+(defn tweeter-screen-name [tweet]
+  "Get the tweeter's screen name"
+  (let [[user (tweet-attr tweet "user")]]
+    (get user "screen_name")))
 
 (defn tweet-reply-to [tweet]
   "Get the in_reply_to_status_id_str attribute of a tweet"
