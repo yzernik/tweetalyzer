@@ -6,4 +6,4 @@ https://twitter.com/tweetalyzerbot
 
 ### Further Reading
 
-* http://yzernik.github.io/jekyll/update/2015/08/25/detecting-drunk-tweets.html
+* http://yzernik.github.io/2015/08/25/detecting-drunk-tweets.html
